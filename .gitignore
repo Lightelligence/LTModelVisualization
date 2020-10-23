@@ -1,0 +1,6 @@
+*/__pycache__/
+bazel-*
+__pycache__/
+wheels*
+.vscode
+.DS_Store
