@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <title>Force Layout Example 9</title>
+    <style>
+      div.tooltip {
+        position: absolute;
+        text-align: center;
+        width: 60px;
+        height: 28px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .longtext {
+        line-height: 13px;
+        height: 40px;
+        font-size: 120%;
+      }
+
+      rect.zoom-panel {
+        cursor: move;
+        fill: #fff;
+        pointer-events: all;
+      }
+      body {
+        overflow: hidden;
+      }
+      .dark_theme {
+        background-color: black;
+      }
+      .light_theme {
+        background-color: white;
+      }
+
+      .bar {
+        fill: rgb(70, 180, 70);
+      }
+
+      .bar2 {
+        fill: red;
+        opacity: 0.7;
+      }
+
+      .graph-svg-component {
+        background-color: green;
+      }
+
+      path_arrow {
+        fill: none;
+        stroke: #d3008c;
+        stroke-width: 2px;
+        fill-opacity: 1;
+      }
+
+      path {
+        stroke-opacity: 1;
+      }
+
+      #arrowhead {
+        fill: #d3008c;
+        stroke: none;
+      }
+
+      .hull {
+        fill: rgb(126, 206, 35);
+        stroke: rgb(87, 180, 70);
+        fill-opacity: 0.2;
+        stroke-opacity: 1;
+        stroke-width: 1px;
+        stroke-linejoin: round;
+        pointer-events: none;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: grey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+      }
+      .line {
+        fill: none;
+        stroke: url(#line-gradient);
+        stroke-width: 3;
+      }
+
+      /* Style the dots by assigning a fill and stroke */
+      .dot {
+        fill: #000000;
+        stroke: #fff;
+      }
+
+      .show {
+        display: block;
+      }
+    </style>
+  </head>
+  <style>
+    @media screen and (min-height: 4096px) {
+      svg {
+        display: flex;
+        height: 4096px;
+      }
+    }
+
+    @media screen and (min-height: 1920px) {
+      svg {
+        display: flex;
+        height: 1100px;
+      }
+    }
+  </style>
+  <body>
+    <svg></svg>
+
+    <div id="content"></div>
+    <script src="http://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-drag.v1.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <script src="https://d3js.org/d3-transition.v1.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"
+    ></script>
+
+    <link
+      href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js"></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='d3_graph.js') }}"
+    ></script>
+
+    <!-- Always mention the folder 'static' when running from Flask as flask requires that folder -->
+    <p id="node_search_label">Enter the name of node to search</p>
+
+    <div id="suggestion-box">
+      <input id="targetNode" name="targetNode" type="text" />
+      <button id="highlightNode">
+        Highlight Node
+      </button>
+      <button id="shrinkNode">
+        Shrink node
+      </button>
+    </div>
+
+    <p id="output"></p>
+
+    <div id="block_container">
+      <div id="searchName"></div>
+    </div>
+  </body>
+</html>

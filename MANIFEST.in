@@ -1,0 +1,4 @@
+recursive-include * *.js
+recursive-include * *.py
+recursive-include * *.html
+include LICENSE
