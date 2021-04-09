@@ -124,8 +124,6 @@ async function drawGraph(graph) {
         });
         link_ids.forEach(function(link_name) {
           document.getElementById(link_name).style.display = "block";
-          // document.getElementById("edgepath" + link_name).style.display =
-          //   "none";
           document.getElementById("edgelabel" + link_name).style.display =
             "none";
         });
@@ -1614,7 +1612,6 @@ async function drawGraph(graph) {
     quadtree_str_to_type_map["textElement_nodes"] = quad_tree_nodes;
 
     // Associating edgepath,edgelbal to the link quadtree.
-    // quadtree_str_to_type_map["edgepath"] = quad_tree_links;
     quadtree_str_to_type_map["edgelabel"] = quad_tree_links;
 
     node_ids = fetch_elements_in_visible_view("node");
