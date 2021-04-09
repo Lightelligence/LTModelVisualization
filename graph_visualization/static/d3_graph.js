@@ -124,8 +124,8 @@ async function drawGraph(graph) {
         });
         link_ids.forEach(function(link_name) {
           document.getElementById(link_name).style.display = "block";
-          document.getElementById("edgepath" + link_name).style.display =
-            "none";
+          // document.getElementById("edgepath" + link_name).style.display =
+          //   "none";
           document.getElementById("edgelabel" + link_name).style.display =
             "none";
         });
@@ -211,24 +211,13 @@ async function drawGraph(graph) {
 
   var dragDrop = d3
     .drag()
-    .on("start", node => {
-      if (!d3.event.active) {
-        simulation.alphaTarget(1).restart();
-      }
-      node.fx = node.x;
-      node.fy = node.y;
-    })
-    .on("drag", node => {
-      node.fx = d3.event.x;
-      node.fy = d3.event.y;
-    })
-    .on("end", node => {
-      if (!d3.event.active) {
-        simulation.alphaTarget(0);
-      }
-      node.fx = node.x;
-      node.fy = node.y;
-      fix_nodes(node);
+    .on("drag", function(dragged_node){
+      dragged_node.x = d3.event.x, dragged_node.y=d3.event.y;
+      d3.select(this).attr("x",dragged_node.x).attr("y",dragged_node.y);
+      id_to_search=("#textElement_nodes"+this.id).replaceAll("/","\\/")
+      d3.select(id_to_search).attr("x",dragged_node.x).attr("y",dragged_node.y)
+      link.filter(function(l) { return l.source === dragged_node; }).attr("x1", dragged_node.x).attr("y1", dragged_node.y);
+      link.filter(function(l) { return l.target === dragged_node; }).attr("x2", dragged_node.x).attr("y2", dragged_node.y);
     });
 
   // Saving a reference to link attributes so that it helps to change
@@ -416,34 +405,6 @@ async function drawGraph(graph) {
     .attr("marker-start", "url(#arrowhead)")
     .style("display", "none");
 
-  var edgepaths = svg
-    .selectAll(".edgepath")
-    .data(graph.links)
-    .enter()
-    .append("path")
-    .attr("d", function(d) {
-      return (
-        "M " +
-        d.source.x +
-        " " +
-        d.source.y +
-        " L " +
-        d.target.x +
-        " " +
-        d.target.y
-      );
-    })
-    .attr("class", "edgepath")
-    .attr("fill-opacity", 0)
-    .attr("stroke-opacity", 0)
-    .attr("fill", "blue")
-    .attr("stroke", "red")
-    .attr("id", function(d) {
-      return "edgepath" + d.linkname + d.target.name;
-    })
-    .style("pointer-events", "none")
-    .style("display", "none");
-
   var edgelabels = svg
     .selectAll(".edgelabel")
     .data(graph.links)
@@ -461,15 +422,6 @@ async function drawGraph(graph) {
     .attr("fill", "black")
     .style("display", "none");
 
-  edgelabels
-    .append("textPath")
-    .attr("xlink:href", function(d, i) {
-      return "#edgepath" + i;
-    })
-    .style("pointer-events", "none")
-    .text(function(d) {
-      return d.linkname;
-    });
 
   var radius = 4;
   var node_data_array = [];
@@ -695,7 +647,7 @@ async function drawGraph(graph) {
   function show_all_link_related_elements(link_name) {
     //show links, edgePaths and edgeLabels
     document.getElementById(link_name).style.display = "block";
-    document.getElementById("edgepath" + link_name).style.display = "block";
+    // document.getElementById("edgepath" + link_name).style.display = "block";
     document.getElementById("edgelabel" + link_name).style.display = "block";
   }
   //Creating a chart
@@ -1662,7 +1614,7 @@ async function drawGraph(graph) {
     quadtree_str_to_type_map["textElement_nodes"] = quad_tree_nodes;
 
     // Associating edgepath,edgelbal to the link quadtree.
-    quadtree_str_to_type_map["edgepath"] = quad_tree_links;
+    // quadtree_str_to_type_map["edgepath"] = quad_tree_links;
     quadtree_str_to_type_map["edgelabel"] = quad_tree_links;
 
     node_ids = fetch_elements_in_visible_view("node");
@@ -1704,19 +1656,6 @@ async function drawGraph(graph) {
       });
 
     textElements_nodes.attr("x", node => node.x).attr("y", node => node.y);
-
-    edgepaths.attr("d", function(d) {
-      var path =
-        "M " +
-        d.source.x +
-        " " +
-        d.source.y +
-        " L " +
-        d.target.x +
-        " " +
-        d.target.y;
-      return path;
-    });
 
     edgelabels.attr("transform", function(d, i) {
       if (d.target.x < d.source.x) {
